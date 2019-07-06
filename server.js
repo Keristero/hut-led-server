@@ -67,8 +67,8 @@ io.on('connection', function(socket){
   });
 
   socket.on('setStripColor', function(stripColors){
-    stripColors.forEach((color,index)=>{
-      strip.pixel(index).color(color)
+    stripColors.forEach((hex,index)=>{
+      strip.pixel(index).color(hex)
     })
     strip.show()
     broadcastStripState(stripColors)
@@ -82,7 +82,8 @@ function broadcastStripState(pstripColors){
   }else{
     let stripColors = []
     for(let i = 0; i < strip.length; i++){
-      stripColors.push(strip.pixel(i).color())
+      let color = strip.pixel(i).color()
+      stripColors.push(color.hex)
     }
     io.emit('stripColor',stripColors);
   }
