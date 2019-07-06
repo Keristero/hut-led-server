@@ -1,25 +1,68 @@
-console.log("server.js ran!!");
+//LED dependencies
+var five = require("johnny-five");
+var pixel = require("node-pixel");
+var Raspi = require("raspi-io").RaspiIO;
 
-let pixel = require("node-pixel");
-var firmata = require('firmata');
- 
-var board = new firmata.Board('/dev/ttyUSB0',function(){
- 
+//Web dependencies
+var app = require('express')();
+var http = require('http').createServer(app);
+var io = require('socket.io')(http);
+
+//LED
+var opts = {};
+opts.port = process.argv[2] || "";
+
+var board = new five.Board({
+  io: new Raspi(),
+});
+var strip = null;
+
+var fps = 60; // how many frames per second do you want to try?
+
+board.on("ready", function() {
+
+    console.log("Board ready, lets add light");
+
     strip = new pixel.Strip({
-        pin: 6, // this is still supported as a shorthand
-        length: 144,
-        firmata: board,
-        controller: "FIRMATA",
- 
+        color_order: pixel.COLOR_ORDER.GRB,
+        board: this,
+        controller: "I2CBACKPACK",
+        strips: [143],
     });
- 
+
     strip.on("ready", function() {
+
         console.log("Strip ready, let's go");
-        strip.color("rgb(0, 255, 0)")
-        strip.show();
+
+        var colors = ["red", "green", "blue", "yellow", "cyan", "magenta", "white"];
+        var current_colors = [0,1,2,3,4];
+        var current_pos = [0,1,2,3,4];
+        var blinker = setInterval(function() {
+
+            strip.color("#000"); // blanks it out
+
+            for (var i=0; i< current_pos.length; i++) {
+                if (++current_pos[i] >= strip.length) {
+                    current_pos[i] = 0;
+                    if (++current_colors[i] >= colors.length) current_colors[i] = 0;
+                }
+                strip.pixel(current_pos[i]).color(colors[current_colors[i]]);
+            }
+
+            strip.show();
+        }, 1000/fps);
     });
 });
 
-setInterval(()=>{
-    console.log('still running...')
-},60000);
+//WEB
+app.get('/', function(req, res){
+  res.sendFile('./client/index.html');
+});
+
+io.on('connection', function(socket){
+  console.log('a user connected');
+});
+
+http.listen(80, function(){
+  console.log('listening on *:80');
+});
