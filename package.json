@@ -21,6 +21,7 @@
     "nodemon": "^1.19.1"
   },
   "dependencies": {
+    "firmata": "^1.0.0",
     "johnny-five": "^1.1.0",
     "node-pixel": "^0.10.2"
   }

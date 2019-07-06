@@ -1,20 +1,19 @@
 console.log("server.js ran!!");
 
-const pixel = require("node-pixel");
-const five = require("johnny-five");
+let pixel = require("node-pixel");
+var firmata = require('firmata');
  
-const opts = {};
-const board = new five.Board(opts);
+var board = new firmata.Board('COM6',function(){
  
-board.on("ready", function() {
     strip = new pixel.Strip({
-        board: this,
-        controller: "I2CBACKPACK",
-        strips: [143], // 1 strip on pin 0 with length 143
+        pin: 6, // this is still supported as a shorthand
+        length: 144,
+        firmata: board,
+        controller: "FIRMATA",
+ 
     });
  
     strip.on("ready", function() {
-        // do stuff with the strip here.
         console.log("Strip ready, let's go");
         strip.color("rgb(0, 255, 0)")
         strip.show();
