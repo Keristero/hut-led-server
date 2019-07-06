@@ -18,7 +18,7 @@ let board = new five.Board({
 });
 let strip = null;
 
-let fps = 60; // how many frames per second do you want to try?
+let fps = 10; // how many frames per second do you want to try?
 
 board.on("ready", function() {
 
@@ -32,16 +32,14 @@ board.on("ready", function() {
     });
 
     strip.on("ready", function() {
-
         console.log("Strip ready, let's go");
 
-        var colors = ["red", "green", "blue", "yellow", "cyan", "magenta", "white"];
-        var current_colors = [0,1,2,3,4];
-        var current_pos = [0,1,2,3,4];
+        strip.color("black");
+        strip.show();
+
+        /*
         var blinker = setInterval(function() {
-
             strip.color("#000"); // blanks it out
-
             for (var i=0; i< current_pos.length; i++) {
                 if (++current_pos[i] >= strip.length) {
                     current_pos[i] = 0;
@@ -49,9 +47,9 @@ board.on("ready", function() {
                 }
                 strip.pixel(current_pos[i]).color(colors[current_colors[i]]);
             }
-
             strip.show();
         }, 1000/fps);
+        */
     });
 });
 
@@ -61,8 +59,34 @@ app.get('/', function(req, res){
 });
 
 io.on('connection', function(socket){
+  broadcastStripState()
   console.log('a user connected');
+
+  socket.on('disconnect', function(){
+    console.log('user disconnected');
+  });
+
+  socket.on('setStripColor', function(stripColors){
+    stripColors.forEach((color,index)=>{
+      strip.pixel(index).color(color)
+    })
+    strip.show()
+    broadcastStripState(stripColors)
+  });
+
 });
+
+function broadcastStripState(pstripColors){
+  if(pstripColors !== undefined){
+    io.emit('stripColor',pstripColors);
+  }else{
+    let stripColors = []
+    for(let i = 0; i < strip.length; i++){
+      stripColors.push(strip.pixel(i).color())
+    }
+    io.emit('stripColor',stripColors);
+  }
+}
 
 http.listen(80, function(){
   console.log('listening on *:80');
