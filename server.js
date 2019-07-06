@@ -1,23 +1,24 @@
 //LED dependencies
-var five = require("johnny-five");
-var pixel = require("node-pixel");
-var Raspi = require("raspi-io").RaspiIO;
+let five = require("johnny-five");
+let pixel = require("node-pixel");
+let Raspi = require("raspi-io").RaspiIO;
 
 //Web dependencies
-var app = require('express')();
-var http = require('http').createServer(app);
-var io = require('socket.io')(http);
+let app = require('express')();
+let http = require('http').createServer(app);
+let io = require('socket.io')(http);
+let path = require('path');
 
 //LED
-var opts = {};
+let opts = {};
 opts.port = process.argv[2] || "";
 
-var board = new five.Board({
+let board = new five.Board({
   io: new Raspi(),
 });
-var strip = null;
+let strip = null;
 
-var fps = 60; // how many frames per second do you want to try?
+let fps = 60; // how many frames per second do you want to try?
 
 board.on("ready", function() {
 
@@ -56,7 +57,7 @@ board.on("ready", function() {
 
 //WEB
 app.get('/', function(req, res){
-  res.sendFile('./client/index.html');
+  res.sendFile(path.join('.','/client/index.html'));
 });
 
 io.on('connection', function(socket){
