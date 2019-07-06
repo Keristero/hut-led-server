@@ -1,0 +1,27 @@
+{
+  "name": "hut-pi-led",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon --delay 5 server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Keristero/hut-pi-led.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Keristero/hut-pi-led/issues"
+  },
+  "homepage": "https://github.com/Keristero/hut-pi-led#readme",
+  "devDependencies": {
+    "nodemon": "^1.19.1"
+  },
+  "dependencies": {
+    "johnny-five": "^1.1.0",
+    "node-pixel": "^0.10.2"
+  }
+}
