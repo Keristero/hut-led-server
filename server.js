@@ -3,7 +3,7 @@ console.log("server.js ran!!");
 let pixel = require("node-pixel");
 var firmata = require('firmata');
  
-var board = new firmata.Board('COM6',function(){
+var board = new firmata.Board('/dev/ttyUSB0',function(){
  
     strip = new pixel.Strip({
         pin: 6, // this is still supported as a shorthand
