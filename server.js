@@ -57,7 +57,7 @@ board.on("ready", function() {
 
 //WEB
 app.get('/', function(req, res){
-  res.sendFile(path.join('__dirname','./client/index.html'));
+  res.sendFile('client/index.html', { root: __dirname });
 });
 
 io.on('connection', function(socket){
