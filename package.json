@@ -25,6 +25,7 @@
     "firmata": "^1.0.0",
     "johnny-five": "^1.1.0",
     "node-pixel": "^0.10.2",
+    "raspi-io": "^10.0.2",
     "socket.io": "^2.2.0"
   }
 }
