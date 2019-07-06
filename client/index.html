@@ -1,6 +1,6 @@
 <head>
     <script src="/socket.io/socket.io.js"></script>
-    <script>
+    <script defer>
     var socket = io();
     let pixelElements = []
     let div_strip = document.getElementById('strip')
@@ -35,7 +35,6 @@
         socket.emit('setStripColor',getElementColors())
     }
     </script>
-
 </head>
 <body>
     <h1>YoUu hacked the mainframe.</h1>
