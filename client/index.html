@@ -1,39 +1,42 @@
 <head>
     <script src="/socket.io/socket.io.js"></script>
     <script defer>
-    var socket = io();
-    let pixelElements = []
-    let div_strip = document.getElementById('strip')
-    let button_set = document.getElementById('set')
+    function ready(){
+        var socket = io();
+        let pixelElements = []
+        let div_strip = document.getElementById('strip')
+        let button_set = document.getElementById('set')
 
-    socket.on('stripColor',function(stripColor){
-        console.log('stripColor',stripColor)
-        stripColor.forEach((hex,index)=>{
-            if(!pixelElements[index]){
-                let picker = document.createElement("input")
-                picker.type = "color"
-                picker.value = hex;
-                div_strip.appendChild(picker);
-                pixelElements.push(picker)
-            }else{
-                let picker = pixelElements[index]
-                picker.type = "color"
-                picker.value = hex;
-            }
+        socket.on('stripColor',function(stripColor){
+            console.log('stripColor',stripColor)
+            stripColor.forEach((hex,index)=>{
+                if(!pixelElements[index]){
+                    let picker = document.createElement("input")
+                    picker.type = "color"
+                    picker.value = hex;
+                    div_strip.appendChild(picker);
+                    pixelElements.push(picker)
+                }else{
+                    let picker = pixelElements[index]
+                    picker.type = "color"
+                    picker.value = hex;
+                }
+            })
         })
-    })
 
-    function getElementColors(){
-        let stripColor = []
-        pixelElements.forEach((element,index)=>{
-            stripColor.push(element.value)
-        })
-        return stripColor;
-    }
+        function getElementColors(){
+            let stripColor = []
+            pixelElements.forEach((element,index)=>{
+                stripColor.push(element.value)
+            })
+            return stripColor;
+        }
 
-    button_set.onclick = function(){
-        socket.emit('setStripColor',getElementColors())
+        button_set.onclick = function(){
+            socket.emit('setStripColor',getElementColors())
+        }
     }
+    document.addEventListener("DOMContentLoaded", ready);
     </script>
 </head>
 <body>
