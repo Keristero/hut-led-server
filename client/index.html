@@ -54,10 +54,13 @@
 
         function getElementColors(){
             let stripColor = []
+	    for(let i = 0; i < 300; i++){
+		stripColor.push("#000000")
+	    }
             pixelElements.forEach((element,index)=>{
                 let zone = lightingZones[index]
                 for(let i = zone.start; i < zone.end; i++){
-                    stripColor.push(element.value)
+                    stripColor[i] = element.value
                 }
             })
             console.log(stripColor)

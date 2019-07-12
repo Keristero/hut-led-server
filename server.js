@@ -16,7 +16,7 @@ opts.port = process.argv[2] || "";
 let board = new five.Board({
   io: new Raspi(),
 });
-let strip = null;
+var strip = null;
 let lastStripColors = null;
 
 let fps = 10; // how many frames per second do you want to try?
@@ -29,7 +29,7 @@ board.on("ready", function() {
         color_order: pixel.COLOR_ORDER.GRB,
         board: this,
         controller: "I2CBACKPACK",
-        strips: [143],
+        strips: [300],
     });
 
     strip.on("ready", function() {
@@ -67,7 +67,8 @@ io.on('connection', function(socket){
     console.log('user disconnected');
   });
 
-  socket.on('setStripColor', function(stripColors){
+  socket.on('setStripColor',(stripColors)=>{
+    console.log("strip",strip)
     lastStripColors = stripColors
     console.log(stripColors)
     stripColors.forEach((hex,index)=>{
