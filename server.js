@@ -69,6 +69,7 @@ io.on('connection', function(socket){
 
   socket.on('setStripColor', function(stripColors){
     lastStripColors = stripColors
+    console.log(stripColors)
     stripColors.forEach((hex,index)=>{
       strip.pixel(index).color(hex)
     })
