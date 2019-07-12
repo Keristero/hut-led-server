@@ -17,6 +17,7 @@ let board = new five.Board({
   io: new Raspi(),
 });
 let strip = null;
+let lastStripColors = null;
 
 let fps = 10; // how many frames per second do you want to try?
 
@@ -67,6 +68,7 @@ io.on('connection', function(socket){
   });
 
   socket.on('setStripColor', function(stripColors){
+    lastStripColors = stripColors
     stripColors.forEach((hex,index)=>{
       strip.pixel(index).color(hex)
     })
@@ -80,12 +82,15 @@ function broadcastStripState(pstripColors){
   if(pstripColors !== undefined){
     io.emit('stripColor',pstripColors);
   }else{
-    let stripColors = []
-    for(let i = 0; i < strip.length; i++){
-      let color = strip.pixel(i).color()
-      stripColors.push(color.hex)
+    if(lastStripColors){
+      io.emit('stripColor',lastStripColors);
+    }else{
+      let stripColors = []
+      for(let i = 0; i < strip.length; i++){
+        let color = strip.pixel(i).color()
+        stripColors.push(color.hex)
+      }
     }
-    io.emit('stripColor',stripColors);
   }
 }
 

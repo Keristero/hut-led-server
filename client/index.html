@@ -1,11 +1,53 @@
 <head>
     <script src="/socket.io/socket.io.js"></script>
     <script defer>
+    
     function ready(){
         var socket = io();
         let pixelElements = []
-        let div_strip = document.getElementById('strip')
+        let div_zones = document.getElementById('zones')
         let button_set = document.getElementById('set')
+
+        let lightingZones = [
+            {
+                name:"hut",
+                start:18,
+                end:103
+            },
+            {
+                name:"hutWall",
+                start:104,
+                end:150
+            },
+            {
+                name:"bunk1",
+                start:160,
+                end:230
+            },
+            {
+                name:"bunk2",
+                start:238,
+                end:261
+            },
+            {
+                name:"bunk3",
+                start:264,
+                end:284
+            },
+            {
+                name:"bunk4",
+                start:288,
+                end:300
+            }
+        ]
+
+        lightingZones.forEach((zone,index)=>{
+            let picker = document.createElement("input")
+            picker.type = "color"
+            picker.value = hex;
+            div_zones.appendChild(picker);
+            pixelElements.push(picker)
+        })
 
         socket.on('stripColor',function(stripColor){
             console.log('stripColor',stripColor)
@@ -14,7 +56,7 @@
                     let picker = document.createElement("input")
                     picker.type = "color"
                     picker.value = hex;
-                    div_strip.appendChild(picker);
+                    div_zones.appendChild(picker);
                     pixelElements.push(picker)
                 }else{
                     let picker = pixelElements[index]
@@ -27,7 +69,10 @@
         function getElementColors(){
             let stripColor = []
             pixelElements.forEach((element,index)=>{
-                stripColor.push(element.value)
+                let zone = lightingZones[index]
+                for(let i = zone.start; i < zone.end; i++){
+                    stripColor.push(element.value)
+                }
             })
             return stripColor;
         }
@@ -42,13 +87,13 @@
 <body>
     <h1>YoUu hacked the mainframe.</h1>
     <button id="set">Send Colors</button>
-    <div id="strip">
+    <div id="zones">
 
     </div>
 </body>
 <style>
     input[type="color"] {
-        width: 32px;
-        height: 32px;
+        width: 128px;
+        height: 128px;
     }
 </style>
