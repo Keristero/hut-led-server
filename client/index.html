@@ -44,26 +44,12 @@
         lightingZones.forEach((zone,index)=>{
             let picker = document.createElement("input")
             picker.type = "color"
-            picker.value = hex;
             div_zones.appendChild(picker);
             pixelElements.push(picker)
         })
 
         socket.on('stripColor',function(stripColor){
             console.log('stripColor',stripColor)
-            stripColor.forEach((hex,index)=>{
-                if(!pixelElements[index]){
-                    let picker = document.createElement("input")
-                    picker.type = "color"
-                    picker.value = hex;
-                    div_zones.appendChild(picker);
-                    pixelElements.push(picker)
-                }else{
-                    let picker = pixelElements[index]
-                    picker.type = "color"
-                    picker.value = hex;
-                }
-            })
         })
 
         function getElementColors(){
